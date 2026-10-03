@@ -1,0 +1,11 @@
+# 构建产物（由 GitHub Actions 生成，不入仓）
+dist/
+*.zip
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 依赖与本地缓存
+node_modules/
+.workbuddy/

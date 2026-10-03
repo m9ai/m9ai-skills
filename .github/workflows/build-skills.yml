@@ -1,0 +1,119 @@
+name: Build Skill Packages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-skills-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # 1. 找出本次改动涉及的 skill 目录
+  detect:
+    name: 检测变更
+    runs-on: ubuntu-latest
+    outputs:
+      skills: ${{ steps.detect.outputs.skills }}
+      count: ${{ steps.detect.outputs.count }}
+      base: ${{ steps.detect.outputs.base }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 确定比对基线
+        id: detect
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags origin "${{ github.base_ref }}"
+            base="origin/${{ github.base_ref }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+          skills="$(./scripts/detect-changed.sh "$base" HEAD)"
+          count="$(printf '%s' "$skills" | awk -F'"' '{ print int((NF - 1) / 2) }')"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "skills=$skills" >> "$GITHUB_OUTPUT"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "检测到 $count 个变更的 skill: $skills"
+
+  # 2. 规范校验（PR 与 push 都会执行）
+  validate:
+    name: 校验 ${{ matrix.skill }}
+    needs: detect
+    if: needs.detect.outputs.count != '0'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        skill: ${{ fromJSON(needs.detect.outputs.skills) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 校验技能包
+        run: ./scripts/validate-skill.sh "${{ matrix.skill }}" "${{ needs.detect.outputs.base }}"
+
+  # 3. 打包 + 上传产物 + 发布 Release（仅 push 到 main）
+  build:
+    name: 打包并发布 ${{ matrix.skill }}
+    needs: [detect, validate]
+    if: github.event_name != 'pull_request' && needs.detect.outputs.count != '0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        skill: ${{ fromJSON(needs.detect.outputs.skills) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 读取版本号
+        id: meta
+        run: echo "version=$(./scripts/read-meta.sh '${{ matrix.skill }}' version)" >> "$GITHUB_OUTPUT"
+
+      - name: 打包
+        id: pkg
+        run: |
+          zipfile="$(./scripts/package-skill.sh "${{ matrix.skill }}" dist)"
+          echo "file=$zipfile" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$zipfile")" >> "$GITHUB_OUTPUT"
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.skill }}-v${{ steps.meta.outputs.version }}
+          path: dist/${{ steps.pkg.outputs.name }}
+          retention-days: 30
+          if-no-files-found: error
+
+      # 仓库为 private，Release 仅对仓库成员可见
+      - name: 打 tag 并发布 Release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ matrix.skill }}/v${{ steps.meta.outputs.version }}"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "::error::[$tag] 该版本已发布，请先递增 SKILL.md 的 version"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$tag"
+          git push origin "$tag"
+          gh release create "$tag" "${{ steps.pkg.outputs.file }}" \
+            --title "${{ matrix.skill }} v${{ steps.meta.outputs.version }}" \
+            --notes "自动构建自 ${{ github.sha }}"
