@@ -7,16 +7,32 @@ WorkBuddy 技能（Skill）monorepo。每个子目录是一个独立的技能包
 ```
 m9ai-skills/
 ├── .github/workflows/build-skills.yml   # 构建流水线
+├── docs/
+│   ├── TAXONOMY.md                      # 分类 / 场景 / 角色等元数据标准
+│   └── CATALOG.md                       # 每个分类 Top 10 候选清单
 ├── scripts/
 │   ├── read-meta.sh                     # 读取 SKILL.md frontmatter 字段
 │   ├── detect-changed.sh                # 检测本次变更涉及的 skill
 │   ├── validate-skill.sh                # 技能包规范校验
 │   └── package-skill.sh                 # 打包为 {目录名}-v{版本号}.zip
 ├── jinshan-train-skill/                 # 金山铁路时刻表
-└── shanghai-school-district-skill/      # 上海学区查询（开发中）
+├── amount-to-chinese-skill/             # 金额转中文大写
+├── deadline-calculator-skill/           # 期限计算（需补节假日数据）
+├── csv-cleaner-skill/                   # CSV 清洗与体检
+├── banned-word-checker-skill/           # 平台违禁词扫描
+├── batch-rename-skill/                  # 批量重命名（预览 + 可撤销）
+├── markdown-linter-skill/               # Markdown 规范检查与修复
+├── json-toolkit-skill/                  # JSON 格式化 / 校验 / 转 TS interface
+└── shanghai-school-district-skill/      # 上海学区查询（数据准备中，阻塞）
 ```
 
-技能包本身只允许两级目录（根目录/二级目录/文件），`scripts/` 与 `.github/` 属于仓库基础设施，不参与打包。
+技能包本身只允许两级目录（根目录/二级目录/文件），`scripts/`、`.github/` 与 `docs/` 属于仓库基础设施，不参与打包。
+
+## 分类标准
+
+新增技能前先读 [docs/TAXONOMY.md](docs/TAXONOMY.md)：它定义了 `category` / `scenarios` /
+`roles` 等受控词表，是官网 Skill 市集筛选的唯一依据。
+候选技能清单见 [docs/CATALOG.md](docs/CATALOG.md)。
 
 ## 发布一个技能
 
@@ -66,3 +82,19 @@ version: 1.0.0
 | `author` | 合作方名称 |
 
 可选子目录：`references/`（参考资料）、`scripts/`（可执行脚本）、`templates/`（模板文件）。
+
+## 脚本自测
+
+带脚本的技能都内置了 `--selftest`，改完脚本先跑一遍：
+
+```bash
+node amount-to-chinese-skill/scripts/amount.js --selftest
+node json-toolkit-skill/scripts/json.js --selftest
+node csv-cleaner-skill/scripts/csv.js --selftest
+node markdown-linter-skill/scripts/mdlint.js --selftest
+node batch-rename-skill/scripts/rename.js --selftest
+node banned-word-checker-skill/scripts/scan.js --selftest
+node deadline-calculator-skill/scripts/deadline.js --selftest
+```
+
+新增脚本时请一并补用例：目前 7 个技能共 164 条断言全绿，是改动不回归的唯一保障。

@@ -19,7 +19,7 @@ fi
 # 取被改动文件路径的顶层目录，排除仓库自身的基础设施目录
 dirs="$(printf '%s\n' "$changed" \
   | awk -F/ 'NF > 1 { print $1 }' \
-  | grep -vE '^(\.github|scripts)$' \
+  | grep -vE '^(\.github|docs|scripts)$' \
   | sort -u || true)"
 
 skills=()

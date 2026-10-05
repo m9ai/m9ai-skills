@@ -62,7 +62,17 @@ if [ -n "$name" ] && [ "$name" != "$DIR" ]; then
   warn "SKILL.md 的 name($name) 与目录名($DIR) 不一致，产物将使用目录名"
 fi
 
-# 6. 内容已变更则版本号必须递增
+# 6. 分类与标签（推荐字段，缺失仅告警：官网市集筛选依赖它们，见 docs/TAXONOMY.md）
+#    等存量技能补齐后再改成 err 强制
+for key in category scenarios roles; do
+  if [ -z "$(fm_get "$DIR/SKILL.md" "$key")" ]; then
+    # 注意：必须用 ${key} 定界——$key 后紧跟中文全角字符时 bash 会把它并入变量名，
+    # 在 set -u 下报 "unbound variable"
+    warn "SKILL.md frontmatter 缺少推荐字段: ${key}（分类标准见 docs/TAXONOMY.md）"
+  fi
+done
+
+# 7. 内容已变更则版本号必须递增
 if [ -n "$BASE" ] && git rev-parse --verify --quiet "${BASE}^{commit}" >/dev/null; then
   if git cat-file -e "${BASE}:${DIR}/SKILL.md" 2>/dev/null; then
     tmp="$(mktemp)"
