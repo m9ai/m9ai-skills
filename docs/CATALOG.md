@@ -23,9 +23,9 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `amount-to-chinese-skill` | 人民币金额转中文大写（发票/合同/票据） | 发票, 记账 | 财务, 行政 | zero | ✅ 已发布 |
-| 2 | `invoice-field-checker-skill` | 发票号码校验位、金额税额勾稽、开票日期合理性，批量输出 | 发票, 对账 | 财务 | zero | **P0** |
-| 3 | `bank-reconciliation-skill` | 两方账单按金额+日期模糊匹配，输出未达账项与差异 | 对账, 记账 | 财务 | zero | **P0** |
-| 4 | `expense-audit-skill` | 报销单必填项、金额合计、超标项、重复票据号检查 | 报销 | 财务, 行政 | zero | **P0** |
+| 2 | `invoice-field-checker-skill` | 代码号码格式、金额税额勾稽、价税合计、开票日期、购方税号校验位（GB 32100）与查重 | 发票, 对账 | 财务 | zero | ✅ 已发布 |
+| 3 | `bank-reconciliation-skill` | 两方账单按金额+日期模糊匹配，输出未达账项与差异 | 对账, 记账 | 财务 | zero | ✅ 已发布 |
+| 4 | `expense-audit-skill` | 报销单必填项、金额合计、超标项、重复票据号检查 | 报销 | 财务, 行政 | zero | ✅ 已发布 |
 | 5 | `iit-calculator-skill` | 累计预扣预缴个税计算（年度税率表，需年更） | 个税, 工资 | 财务, HR | zero | P1 |
 | 6 | `loan-calculator-skill` | 等额本息/等额本金/提前还款，输出完整还款计划表 | 贷款, 预算 | 财务, 管理层 | zero | P1 |
 | 7 | `payroll-calculator-skill` | 工资表应发/代扣/实发，含社保公积金比例（需年更） | 工资, 社保 | HR, 财务 | zero | P1 |
@@ -43,9 +43,9 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `deadline-calculator-skill` | 工作日/自然日推算，含法定节假日与调休（诉讼时效、合同到期） | 期限计算, 合同审查 | 法务, HR | zero | ✅ 已发布 ⚠️ |
-| 2 | `pii-redactor-skill` | 手机号/身份证/银行卡/邮箱/住址识别与脱敏 | 脱敏, 合规检查 | 法务, 研发, 行政 | zero | **P0** |
-| 3 | `contract-checklist-skill` | 必备条款（主体/标的/金额/期限/违约/争议解决）存在性检查，语义判断交给 Agent | 合同审查, 条款检查 | 法务 | zero | **P0** |
-| 4 | `file-evidence-seal-skill` | 对目录生成 SHA-256 清单（含时间戳），可事后核验是否被改动 | 证据固化 | 法务, 合规 | zero | **P0** |
+| 2 | `pii-redactor-skill` | 手机号/身份证/银行卡/邮箱/车牌/IP 识别与脱敏；姓名与住址交由 Agent | 脱敏, 合规检查 | 法务, 研发, 行政 | zero | ✅ 已发布 |
+| 3 | `contract-checklist-skill` | 必备条款（主体/标的/金额/期限/违约/争议解决）存在性检查，语义判断交给 Agent | 合同审查, 条款检查 | 法务 | zero | ✅ 已发布 |
+| 4 | `file-evidence-seal-skill` | 对目录生成 SHA-256 清单（含时间戳），可事后核验是否被改动 | 证据固化 | 法务, 合规 | zero | ✅ 已发布 |
 | 5 | `id-number-validator-skill` | 18 位身份证校验位、出生日期、地区码合法性 | 主体核验 | 法务, HR, 行政 | zero | P1 |
 | 6 | `uscc-validator-skill` | 统一社会信用代码 GB 32100 校验位与结构校验 | 主体核验 | 法务, 财务 | zero | P1 |
 | 7 | `contract-diff-skill` | 两版合同条款级对齐比对，输出新增/删除/修改 | 合同审查 | 法务 | zero | P1 |
@@ -60,9 +60,9 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `csv-cleaner-skill` | 编码检测、分隔符嗅探、去空行、类型归一化、日期标准化 | 数据清洗, 编码处理 | 运营, 财务, 销售 | zero | ✅ 已发布 |
-| 2 | `csv-aggregator-skill` | 分组聚合、求和/均值/中位数/分位数、TopN | 汇总统计, 报表生成 | 运营, 销售, 管理层 | zero | **P0** |
-| 3 | `data-quality-checker-skill` | 空值率/唯一性/异常值/枚举合法性，输出体检报告 | 质量体检 | 运营, 分析 | zero | **P0** |
-| 4 | `csv-diff-skill` | 按关键列比对两表，输出新增/删除/变更 | 差异比对, 去重 | 运营, 财务 | zero | **P0** |
+| 2 | `csv-aggregator-skill` | 分组聚合、求和/均值/中位数/分位数、TopN | 汇总统计, 报表生成 | 运营, 销售, 管理层 | zero | ✅ 已发布 |
+| 3 | `data-quality-checker-skill` | 空值率/唯一性/异常值/枚举合法性，输出体检报告 | 质量体检 | 运营, 分析 | zero | ✅ 已发布 |
+| 4 | `csv-diff-skill` | 按关键列比对两表，输出新增/删除/变更 | 差异比对, 去重 | 运营, 财务 | zero | ✅ 已发布 |
 | 5 | `log-analyzer-skill` | 常见日志格式解析、时间窗统计、错误码聚合、慢请求 TopN | 日志分析 | 运维, 研发 | zero | P1 |
 | 6 | `json-batch-validator-skill` | 批量语法校验 + 简易 schema 字段校验 | 格式转换, 数据清洗 | 研发, 运营 | zero | P1 |
 | 7 | `dir-inventory-skill` | 按扩展名/大小/时间统计文件分布，找出大文件与空目录 | 汇总统计 | 行政, 运维 | zero | P1 |
@@ -77,8 +77,8 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `banned-word-checker-skill` | 平台违禁词命中；脚本做变体检测（全角/空格/拼音/同音/符号插入），语义变体交给 Agent | 违禁词, 合规检查 | 运营, 市场 | zero | ✅ 已发布 |
-| 2 | `pii-leak-scanner-skill` | 文本中的手机号/身份证/银行卡/邮箱/密钥/AK 泄露检测 | 敏感信息 | 运营, 法务, 研发 | zero | **P0** |
-| 3 | `ad-law-risk-checker-skill` | 「最」「第一」「国家级」等广告法风险词检测 | 极限词, 合规检查 | 市场, 电商 | zero | **P0** |
+| 2 | `pii-leak-scanner-skill` | 代码/配置/日志中的密钥（云 AK/token/私钥/连接串）与个人信息泄露检测 | 敏感信息 | 运营, 法务, 研发 | zero | ✅ 已发布 |
+| 3 | `ad-law-risk-checker-skill` | 「最」「第一」「国家级」等广告法风险词检测 | 极限词, 合规检查 | 市场, 电商 | zero | ✅ 已发布 |
 | 4 | `content-dedupe-skill` | SimHash/Shingle 相似度批量比对，输出重复对 | 查重 | 运营, 市场 | zero | P1 |
 | 5 | `copy-length-checker-skill` | 平台字数限制、全角标点替换、标题长度、emoji 计数 | 字数规范, 多平台发布 | 运营 | zero | P1 |
 | 6 | `zh-en-typesetting-checker-skill` | 中英文空格、标点、数字与单位格式规范 | 排版规范 | 运营, 市场 | zero | P2 |
@@ -94,8 +94,8 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `batch-rename-skill` | 规则重命名（序号/日期/正则/大小写/替换），预览 + 可撤销 | 批量重命名 | 行政, 设计, 研发 | zero | ✅ 已发布 |
-| 2 | `duplicate-file-finder-skill` | hash 比对输出重复组，可选清理（预览） | 去重 | 行政, 运维 | zero | **P0** |
-| 3 | `dir-fingerprint-skill` | 生成目录 hash 清单，比对两份目录的新增/删除/修改 | 目录比对, 完整性校验 | 运维, 法务 | zero | **P0** |
+| 2 | `duplicate-file-finder-skill` | 内容 hash 找出重复组与可释放空间，生成待删清单（不执行删除） | 去重 | 行政, 运维 | zero | ✅ 已发布 |
+| 3 | `dir-fingerprint-skill` | 生成目录 hash 清单，比对两份目录的新增/删除/修改 | 目录比对, 完整性校验 | 运维, 法务 | zero | ✅ 已发布 |
 | 4 | `checksum-verifier-skill` | 计算并校验 MD5/SHA1/SHA256 清单 | 完整性校验 | 运维, 行政 | zero | P1 |
 | 5 | `batch-encoding-convert-skill` | 批量检测并转换文件编码（UTF-8/GBK/BOM） | 编码转换 | 行政, 研发 | zero | P1 |
 | 6 | `file-type-detector-skill` | 按 magic bytes 判断真实类型，找出扩展名不符的文件 | 类型识别 | 运维, 行政 | zero | P1 |
@@ -111,8 +111,8 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `markdown-linter-skill` | 标题层级、列表缩进、链接、代码块、表格对齐检查与修复 | Markdown, 排版 | 研发, 行政 | zero | ✅ 已发布 |
-| 2 | `markdown-table-builder-skill` | 从 CSV/TSV 生成对齐的 Markdown 表格 | 表格, Markdown | 运营, 研发 | zero | **P0** |
-| 3 | `subtitle-converter-skill` | SRT/ASS/VTT 互转 | 字幕, 格式转换 | 运营, 市场 | zero | **P0** |
+| 2 | `markdown-table-builder-skill` | 从 CSV/TSV 生成对齐的 Markdown 表格 | 表格, Markdown | 运营, 研发 | zero | ✅ 已发布 |
+| 3 | `subtitle-converter-skill` | SRT/ASS/VTT 互转 | 字幕, 格式转换 | 运营, 市场 | zero | ✅ 已发布 |
 | 4 | `subtitle-shift-skill` | 字幕时间轴整体偏移 / 按比例缩放 | 字幕 | 运营 | zero | P1 |
 | 5 | `png-meta-reader-skill` | 读取 PNG tEXt chunk，提取 SD / ComfyUI prompt | 元数据 | 设计, 市场 | zero | P1 |
 | 6 | `pdf-meta-reader-skill` | PDF 元信息、页数、书签（文本层可查部分） | 元数据, PDF | 行政 | zero | P1 ⚠️ |
@@ -128,8 +128,8 @@
 | # | Skill | 能力 | 场景 | 角色 | 依赖 | 优先级 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `json-toolkit-skill` | 格式化、批量校验、生成 TypeScript interface | 类型生成, 格式转换 | 研发 | zero | ✅ 已发布 |
-| 2 | `secret-scanner-skill` | 扫描代码目录中的 AK/SK/私钥/token 特征 | 密钥扫描, 合规检查 | 研发, 运维 | zero | **P0** |
-| 3 | `cron-explainer-skill` | 解析 cron 表达式并输出未来 N 次执行时间 | 定时任务 | 运维, 研发 | zero | **P0** |
+| 2 | `secret-scanner-skill` | 扫描工作区/暂存区/Git 历史中的 AK/SK/私钥/token，适合 CI 卡口 | 密钥扫描, 合规检查 | 研发, 运维 | zero | ✅ 已发布 |
+| 3 | `cron-explainer-skill` | 解析 cron 表达式并输出未来 N 次执行时间 | 定时任务 | 运维, 研发 | zero | ✅ 已发布 |
 | 4 | `env-config-checker-skill` | 比对 `.env.example` 与实际环境，找缺失/多余项 | 配置检查 | 研发, 运维 | zero | P1 |
 | 5 | `log-error-aggregator-skill` | 按错误模式聚合，输出 TopN 与首次/末次时间 | 日志聚合 | 运维 | zero | P1 |
 | 6 | `regex-batch-tester-skill` | 对样本集批量跑正则，输出命中统计 | 正则测试 | 研发 | zero | P1 |
@@ -178,16 +178,16 @@
 
 | 分类 | Top 10 中 P0 | 已落地 | 说明 |
 | --- | --- | --- | --- |
-| finance 财税 | 4 | 1（`amount-to-chinese`） | 发票与对账是最高频刚需 |
-| legal 法务合规 | 4 | 1（`deadline-calculator`） | 期限、脱敏、合同、证据四条线 |
-| data 数据统计 | 4 | 1（`csv-cleaner`） | CSV 四件套构成完整处理链 |
-| content 内容合规 | 3 | 1（`banned-word-checker`） | 违禁词/极限词/敏感信息 |
-| files 文件批处理 | 3 | 1（`batch-rename`） | 重命名/去重/指纹 |
-| document 文档处理 | 3 | 1（`markdown-linter`） | Markdown / 表格 / 字幕 |
-| devops 研发运维 | 3 | 1（`json-toolkit`） | JSON / 密钥扫描 / cron |
+| finance 财税 | 4 | 4（`amount-to-chinese` `invoice-field-checker` `bank-reconciliation` `expense-audit`） | 发票与对账是最高频刚需 |
+| legal 法务合规 | 4 | 4（`deadline-calculator` `pii-redactor` `contract-checklist` `file-evidence-seal`） | 期限、脱敏、合同、证据四条线 |
+| data 数据统计 | 4 | 4（`csv-cleaner` `csv-aggregator` `data-quality-checker` `csv-diff`） | CSV 四件套构成完整处理链 |
+| content 内容合规 | 3 | 3（`banned-word-checker` `pii-leak-scanner` `ad-law-risk-checker`） | 违禁词/极限词/敏感信息 |
+| files 文件批处理 | 3 | 3（`batch-rename` `duplicate-file-finder` `dir-fingerprint`） | 重命名/去重/指纹 |
+| document 文档处理 | 3 | 3（`markdown-linter` `markdown-table-builder` `subtitle-converter`） | Markdown / 表格 / 字幕 |
+| devops 研发运维 | 3 | 3（`json-toolkit` `secret-scanner` `cron-explainer`） | JSON / 密钥扫描 / cron |
 | travel 出行交通 | 0 | 1（`jinshan-train`） | 暂不新增 P0 |
 | life 生活服务 | 0 | 0（`shanghai-school-district` 数据准备中） | 暂不新增 P0 |
-| **合计** | **24 个 P0** | **8 个已发布** | 候选池 90 个 |
+| **合计** | **24 个 P0** | **25 个已发布** | 候选池 90 个 |
 
 ## 落地顺序建议
 
@@ -195,8 +195,19 @@
    验证「分类 → 场景 → 角色」这套元数据跑得通，官网市集有内容可展示：
    `amount-to-chinese` · `deadline-calculator` · `csv-cleaner` · `banned-word-checker` · `batch-rename` · `markdown-linter` · `json-toolkit`
    （travel 与 life 已有存量技能，不占本批名额）
-2. **第二批**：补齐各分类剩余 P0（约 17 个）。做完第一批先观察市集的下载数据再决定顺序。
+2. **第二批（补齐各分类剩余 P0，共 17 个）——已完成。**
+   finance：`invoice-field-checker` · `bank-reconciliation` · `expense-audit`
+   legal：`pii-redactor` · `contract-checklist` · `file-evidence-seal`
+   data：`csv-aggregator` · `data-quality-checker` · `csv-diff`
+   content：`pii-leak-scanner` · `ad-law-risk-checker`
+   files：`duplicate-file-finder` · `dir-fingerprint`
+   document：`markdown-table-builder` · `subtitle-converter`
+   devops：`secret-scanner` · `cron-explainer`
 3. **第三批**：按下载/留资数据决定 P1 做哪些，P2 视情况放弃。
+
+> ⚠️ 已知重叠：`secret-scanner`（devops）与 `pii-leak-scanner`（content）都扫密钥凭证。
+> 前者定位 CI 卡口（支持 Git 历史与暂存区），后者定位人工排查（含个人信息）。
+> 若后续数据显示两者使用率都低，考虑合并为一个。
 
 > 每批做完先观察市集的下载与留资数据，再决定下一批——**不要一次性把 80 个全做出来**。
 

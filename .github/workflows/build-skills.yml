@@ -99,7 +99,8 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-      # 仓库为 private，Release 仅对仓库成员可见
+      # 仓库为 public，Release 与 zip 产物对外可见、可匿名下载
+      # 若将来转回 private，官网的下载与安装入口需同步调整
       - name: 打 tag 并发布 Release
         if: github.event_name == 'push'
         env:
